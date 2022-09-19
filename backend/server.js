@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 const nedb = require("nedb-promise");
 const bcryptFunction = require("./bcrypt");
+const jwt = require("jsonwebtoken");
 
 app.use(
   cors({
@@ -50,6 +51,31 @@ app.post("/api/signup", async (request, response) => {
 });
 
 //login
+app.post("/api/login", async (request, response) => {
+  const credentials = request.body;
+  const resObj = {
+    success: false,
+    user: "",
+    token: "",
+  };
+  const findAccount = await accountsDB.find({ username: credentials.username });
+
+  if (findAccount.length > 0) {
+    const samePassword = await bcryptFunction.comparePassword(
+      credentials.password,
+      findAccount[0].password
+    );
+    if (samePassword) {
+      resObj.user = findAccount[0].username;
+      resObj.success = true;
+    }
+    const token = jwt.sign({ username: findAccount[0].username }, "fiskmås", {
+      expiresIn: 600,
+    });
+    resObj.token = token;
+  }
+  response.json(resObj);
+});
 
 //add photo
 
