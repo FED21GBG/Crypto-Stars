@@ -4,6 +4,7 @@ const app = express();
 const nedb = require("nedb-promise");
 const bcryptFunction = require("./bcrypt");
 const jwt = require("jsonwebtoken");
+const { request, response } = require("express");
 
 app.use(
   cors({
@@ -14,6 +15,7 @@ app.use(
 app.use(express.json());
 
 const accountsDB = new nedb({ filename: "accounts.db", autoload: true });
+const photoAlbumDB =  new nedb ({filename:"photoAlbum.db", autoload:true})
 
 //sign up
 app.post("/api/signup", async (request, response) => {
@@ -78,6 +80,34 @@ app.post("/api/login", async (request, response) => {
 });
 
 //add photo
+app.post('/api/addPhoto', async(request, response)=>{
+  const credentials = request.body
+
+  const resObj={
+    success : true
+  }
+
+  const userObj={
+    username: credentials.username,
+    img: [credentials.img]
+  }
+
+  const findUser = await photoAlbumDB.find({username: credentials.username})
+//om user har bilder
+  if(findUser.length > 0 ){
+    const user = findUser[0].username
+
+    await photoAlbumDB.update({
+      username: user
+    },{
+      $push: {img: credentials.img}
+    })
+  }else{
+    photoAlbumDB.insert(userObj)
+  }
+response.json(resObj)
+
+})
 
 //delete photo
 
