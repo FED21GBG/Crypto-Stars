@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import StartPage from './Pages/StartPage';
@@ -11,7 +11,7 @@ import TakenPhotoPage from './Pages/TakenPhotoPage';
 
 function App() {
   return (
-    <section>
+    
       <Router>
         <Routes>
           <Route path='/' element={<StartPage />} />
@@ -22,7 +22,7 @@ function App() {
           <Route path='/TakenPhotoPage' element={<TakenPhotoPage />} />
         </Routes>
       </Router>
-    </section>
+  
   );
 }
 

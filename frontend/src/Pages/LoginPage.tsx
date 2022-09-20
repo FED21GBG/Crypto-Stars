@@ -25,6 +25,7 @@ function LoginPage() {
         console.log(data);
         if (data.success) {
             navigate('/CameraPage')
+            localStorage.setItem('username', data.username)
         } else {
             alert('This account does not excist. Please sign up to use this amazing app:)')
         }
