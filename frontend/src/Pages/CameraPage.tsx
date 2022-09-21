@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { isNull } from "util";
 
 function CameraPage() {
   const navigate = useNavigate()
@@ -8,27 +7,47 @@ function CameraPage() {
   const cameraRef = useRef(null);
   const canvasRef = useRef(null);
   const [username, setUsername]= useState('');
+  const [photo64, setphoto64]= useState('');
 
+// const checkCanvas = useCallback(()=>{
+//   if(canvasRef != null){
+//     takePhoto()
+//   }
+  
+// },[canvasRef])
 
-  async function takePhoto(){
-    const userInfo ={
-      username: username,
-      img:''
-    }
+  async function takePhoto()  {
+   
+    
+    const width = 450
+    const height = 450
+    
     let video = cameraRef.current
-    let img:any = canvasRef.current
-    img.width = 350
-    img.height = 262.5
 
-    let ctx = img.getContext('2d')
-    ctx.drawImage(video, 0, 0, img.width, img.height)
-    let dataUrl = img.toDataURL('image/png')
-    const getBase64StringFromDataURL = (dataURL:string) =>
-    dataURL.replace('data:', '').replace(/^.+,/, '');
-    const base64 = getBase64StringFromDataURL(dataUrl)
+    let photo:any = canvasRef.current
+
+        photo.width = width
+
+        photo.height = height
+
+    let context = photo.getContext('2d')
+
+    context.drawImage(video, 0, 0, width, height)
+
+    
+    
+    let dataUrl = photo.toDataURL()
+    // const getBase64StringFromDataURL = (dataURL:string) =>
+    // dataURL.replace('data:', '').replace(/^.+,/, '');
+    // const base64 = getBase64StringFromDataURL(dataUrl)
     // let imgUrl = dataUrl.replace(/^data:image\/(png|jpg);base64,/, "")
-    userInfo.img= base64
-    localStorage.setItem('photo',base64)
+
+    const userInfo ={
+      username:username,
+      img:photo64
+
+    }
+    userInfo.img= dataUrl
 
     const response = await fetch('http://localhost:2009/api/addPhoto',{
       method: 'POST',
@@ -39,32 +58,32 @@ function CameraPage() {
     const data = await response.json()
 
     console.log(data);
-    
+console.log(dataUrl);
+setphoto64(dataUrl)
+localStorage.setItem('photo', dataUrl )
 
 navigate ('/TakenPhotoPage')
-    
+
+
   }
 
   function getUsercamera (){
-    navigator.mediaDevices.getUserMedia({video: true, audio: false})
-    .then ((stream)=>{
-      let video:any  = cameraRef.current
-      
-        video.srcObject= stream
-        video.play()
-      
-     
-      // console.log(typeof video);
-
-    })
-    .catch((error)=>{
-      console.error(`${error}`);
-      
-      
-    })
+     navigator.mediaDevices
+      .getUserMedia({
+        video: true
+      })
+      .then((stream) => {
+        let video:any = cameraRef.current;
+        video.srcObject = stream;
+        video.play();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     
   }
-  getUsercamera()
+
+
 
 
   
@@ -74,6 +93,8 @@ navigate ('/TakenPhotoPage')
     if(typeof getUsername === 'string'){
       setUsername(getUsername)
     }
+    getUsercamera();
+
 
   },[])
 
