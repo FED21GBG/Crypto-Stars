@@ -4,18 +4,34 @@ const app = express();
 const nedb = require("nedb-promise");
 const bcryptFunction = require("./bcrypt");
 const jwt = require("jsonwebtoken");
-const { request, response } = require("express");
-
+const bodyParser = require("body-parser");
 app.use(
   cors({
     origin: "*",
   })
 );
 
-app.use(express.json());
+// app.use(express.json());
 
-const accountsDB = new nedb({ filename: "accounts.db", autoload: true });
-const photoAlbumDB =  new nedb ({filename:"photoAlbum.db", autoload:true})
+
+// app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+// app.use(bodyParser.text({
+//   limit: '200mb',
+//   extended: true
+ 
+// }));
+app.use(express.json({limit: '50mb',extended: true}));
+app.use(express.urlencoded({limit: '50mb', extended: true}));
+
+
+const accountsDB = new nedb({
+  filename: "accounts.db",
+  autoload: true
+});
+const photoAlbumDB = new nedb({
+  filename: "photoAlbum.db",
+  autoload: true
+})
 
 //sign up
 app.post("/api/signup", async (request, response) => {
@@ -60,7 +76,9 @@ app.post("/api/login", async (request, response) => {
     user: "",
     token: "",
   };
-  const findAccount = await accountsDB.find({ username: credentials.username });
+  const findAccount = await accountsDB.find({
+    username: credentials.username
+  });
 
   if (findAccount.length > 0) {
     const samePassword = await bcryptFunction.comparePassword(
@@ -71,7 +89,9 @@ app.post("/api/login", async (request, response) => {
       resObj.user = findAccount[0].username;
       resObj.success = true;
     }
-    const token = jwt.sign({ username: findAccount[0].username }, "fiskmås", {
+    const token = jwt.sign({
+      username: findAccount[0].username
+    }, "fiskmås", {
       expiresIn: 600,
     });
     resObj.token = token;
@@ -80,32 +100,33 @@ app.post("/api/login", async (request, response) => {
 });
 
 //add photo
-app.post('/api/addPhoto', async(request, response)=>{
+app.post('/api/addPhoto', async (request, response) => {
   const credentials = request.body
-
-  const resObj={
-    success : true
-  }
-
-  const userObj={
+console.log(credentials);
+  const userObj = {
     username: credentials.username,
     img: [credentials.img]
   }
 
-  const findUser = await photoAlbumDB.find({username: credentials.username})
-//om user har bilder
-  if(findUser.length > 0 ){
-    const user = findUser[0].username
+  const findUser = await photoAlbumDB.find({
+    username: credentials.username
+  })
+  //om user har bilder
+  if (findUser.length > 0) {
+    const user = findUser[0]._id
 
-    await photoAlbumDB.update({
-      username: user
-    },{
-      $push: {img: credentials.img}
+    photoAlbumDB.update({
+      _id: user
+    }, {
+      $push: {
+        img: credentials.img
+      }
     })
-  }else{
+  } else {
     photoAlbumDB.insert(userObj)
   }
-response.json(resObj)
+  response.json(userObj)
+  console.log(userObj);
 
 })
 
@@ -114,5 +135,5 @@ response.json(resObj)
 //log out
 
 app.listen(2009, () => {
-  console.log("Server listening to port 2009");
+  console.log("Server listening to port 2009")
 });

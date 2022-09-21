@@ -17,6 +17,5 @@
         "nedb-promise": "^2.0.1",
         "node-modules": "^1.0.1"
     },
-    "devDependencies": {},
     "description": ""
 }
