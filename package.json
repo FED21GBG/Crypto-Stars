@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/FED21GBG/Crypto-Stars/issues"
   },
-  "homepage": "https://github.com/FED21GBG/Crypto-Stars#readme"
+  "homepage": "https://github.com/FED21GBG/Crypto-Stars#readme",
+  "dependencies": {
+    "react-router-dom": "^6.4.0"
+  }
 }
