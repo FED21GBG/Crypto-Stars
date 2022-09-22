@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import albumLogo from "../gallery.svg";
 
 function CameraPage() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ function CameraPage() {
 
   async function takePhoto() {
     const width = 450;
-    const height = 450;
+    const height = 338;
 
     let video: HTMLVideoElement | null = cameraRef.current;
     let dataUrl = "";
@@ -91,15 +92,20 @@ function CameraPage() {
   }, []);
 
   return (
-    <section>
-      <video
-        style={{ width: "350px" }}
-        src=""
-        id="camera"
-        ref={cameraRef}
-      ></video>
-      <button onClick={() => takePhoto()}>ta en bild</button>
-      <canvas ref={canvasRef}></canvas>
+    <section className="camera-section">
+      <button className="logout-btn" onClick={() => navigate("/LoginPage")}>
+        Logga ut
+      </button>
+      <img
+        className="album-logo"
+        src={albumLogo}
+        onClick={() => navigate("/PhotoAlbumPage")}
+      ></img>
+      <video className="camera" src="" id="camera" ref={cameraRef}></video>
+      <button className="camera-btn" onClick={() => takePhoto()}>
+        FÖREVIGA ETT ÖGONBLICK
+      </button>
+      <canvas className="canvas" ref={canvasRef}></canvas>
     </section>
   );
 }

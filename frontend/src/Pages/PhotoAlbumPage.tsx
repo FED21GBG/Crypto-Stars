@@ -1,9 +1,14 @@
 import { get } from "https";
 import { useEffect, useState } from "react";
+import cameraLogo from "../logo.svg";
+import close from "../close-outline.svg";
+import { useNavigate } from "react-router-dom";
 
 function PhotoAlbumPage() {
   const user = localStorage.getItem("username");
   const [pictures, setPictures] = useState([]);
+
+  const navigate = useNavigate();
 
   async function getAlbum() {
     const reqObj = {
@@ -42,12 +47,22 @@ function PhotoAlbumPage() {
   }
 
   return (
-    <section>
-      PhotoAlbumPage
+    <section className="album-container">
+      <img
+        className="album-logo"
+        src={cameraLogo}
+        alt=""
+        onClick={() => navigate("/CameraPage")}
+      />
+
       {pictures.map((pic: string, i) => (
-        <article key={i}>
-          <img src={pic}></img>
-          <button onClick={() => deletePhoto(pic)}>Ta bort bild</button>
+        <article className="img-article" key={i}>
+          <img className="album-img" src={pic}></img>
+          <img
+            src={close}
+            className="remove-btn"
+            onClick={() => deletePhoto(pic)}
+          ></img>
         </article>
       ))}
     </section>
