@@ -69,8 +69,10 @@ app.post("/api/signup", async (request, response) => {
 //login
 app.post("/api/login", async (request, response) => {
   const credentials = request.body;
+  console.log(credentials);
   const resObj = {
     success: false,
+    role: false,
     user: "",
     token: "",
   };
@@ -78,14 +80,20 @@ app.post("/api/login", async (request, response) => {
     username: credentials.username,
   });
 
+  // const findRole = await accountsDB.find({ role: credentials.role });
+  const role = findAccount[0].role;
+
   if (findAccount.length > 0) {
-    const samePassword = await bcryptFunction.comparePassword(
-      credentials.password,
-      findAccount[0].password
-    );
-    if (samePassword) {
-      resObj.user = findAccount[0].username;
-      resObj.success = true;
+    if (role === credentials.role) {
+      const samePassword = await bcryptFunction.comparePassword(
+        credentials.password,
+        findAccount[0].password
+      );
+      if (samePassword) {
+        resObj.user = findAccount[0].username;
+        resObj.role = true;
+        resObj.success = true;
+      }
     }
     const token = jwt.sign(
       {

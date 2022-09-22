@@ -24,7 +24,7 @@ function SignupPage() {
     const data = await response.json();
     console.log(data);
     if (data.success) {
-      localStorage.setItem("username", data.user);
+      localStorage.setItem("username", user.username);
       navigate("/CameraPage");
     } else {
       alert("user already excists, pick another name or password :)");
