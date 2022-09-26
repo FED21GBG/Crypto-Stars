@@ -33,7 +33,7 @@ function LoginPage() {
       navigate("/CameraPage");
     } else {
       alert(
-        "This account does not excist or wrong role. Either sign up or check your role ;)"
+        "This account does not exist or wrong role. Either sign up or check your role ;)"
       );
     }
   }

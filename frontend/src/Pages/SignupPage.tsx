@@ -26,7 +26,7 @@ function SignupPage() {
       console.log(data);
       if (data.success) {
         localStorage.setItem("username", user.username);
-        navigate("/CameraPage");
+        navigate("/LoginPage");
       } else {
         alert("user already excists, pick another name or password :)");
       }

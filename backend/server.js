@@ -89,8 +89,8 @@ app.post("/api/login", async (request, response) => {
     username: credentials.username,
   });
 
-  // const findRole = await accountsDB.find({ role: credentials.role });
-  const role = findAccount[0].role;
+  const findRole = await accountsDB.find({ role: credentials.role });
+  const role = findRole[0].role;
 
   if (findAccount.length > 0) {
     if (role === credentials.role) {

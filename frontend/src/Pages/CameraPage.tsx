@@ -97,6 +97,7 @@ function CameraPage() {
   function logout() {
     navigate("/LoginPage");
     window.localStorage.clear();
+    window.sessionStorage.clear();
   }
 
   return (
