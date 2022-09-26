@@ -9,14 +9,15 @@
 {"username":"vouhbijnkm","password":"$2a$10$B2ruf5Z1Mk292lpus0qFouWCti8cQUG.jdeiFBo6WrUZciNNUTBAO","email":"fcygvkhbjln","role":"guest","_id":"MUTtH6nk3gOexxFc"}
 {"username":"kråkan","email":"kråkan","password":"$2a$10$Y3YZLRSuKvblKvgeh/j9iuJLLxUJt3a0OvJp4cJ0NuqfFQ4zy8ZdW","role":"guest","_id":"Srn9ig36fWkA8D7n"}
 {"username":"kråkan","email":"kråkan","password":"$2a$10$bThb.Zni4a2.rIt7JUrbh.3KXetptQnP5/Bc0ZnWSai/g5KSNTFKG","role":"guest","_id":"VHAWiUqcuPFltIiH"}
+{"username":"les","password":"$2a$10$VuVPdL0kYZtwUVDIF5uhMeMTr6lOz/BkLx7qgkvHuI05pG3b6dfBG","email":"les","role":"guest","_id":"WNetZLvYXAKMubSM"}
 {"username":"newuser","password":"$2a$10$.0mSvwb4L3k.mGUXmcGu/Okt/VCbVybRYOVaM6rnQbz/ZwmxKH9pm","email":"n","role":"guest","_id":"WRJhQwycV0N5VFZZ"}
+{"username":"x","password":"$2a$10$iDKc9jUMMQ0HsdBr66j8Hucof7AmdGBrey5ALsmzsLysCl5OZrgrq","email":"x","role":"guest","_id":"b1SXmsXDi2PZbmfc"}
 {"username":"dsda","password":"$2a$10$CwK2w/LG9ghW2U1jF6SG/OWKZFuvT12lO3kiNspwgSG.RSJe/N9IS","email":"dsa","role":"guest","_id":"e5uvWWryJya8ptjs"}
 {"username":"a","email":"a","password":"$2a$10$z3CSbFMPW.hHf9CwasnJbetNhNEYA/oPwZIcTMjJe442IQ2TdHVMW","role":"guest","_id":"k3vGNFxNc6l3zJSd"}
 {"username":"q","password":"$2a$10$5tBuRPnYH5612XwqxyPnNeVgnjZ1gsnlybIWf3.wvLs4/yNMRpdJ2","email":"q","role":"guest","_id":"lVLCP4gfPOMSr2rG"}
+{"username":"leslie","password":"$2a$10$rXd4f0AXHd49UiaadTosHeNsrseDs6sNWlYEyXyWljV1QU2OUV64e","email":"leslie.knope@kattmail.com","role":"guest","_id":"mK8bWTrPdBAHKcxf"}
 {"username":"hej","password":"$2a$10$z9j69/yd1SGGdzCXMgYbPesOEkwUXaaBY2eNcmPDsFzxIDGGADEM6","email":"hej","role":"guest","_id":"pl5hSaQzYfwKQBpY"}
 {"username":"b","password":"$2a$10$qQimg5PJ3JED1G0mFr69WupXFemy6QMLRR4q1fWBm.4mB.Jl49sUS","email":"b","role":"guest","_id":"v0tZTJS5fNUYtTrB"}
 {"username":"charlie","password":"$2a$10$czbFS9er0h1upZcfIUA8Ruk7mQAVRfVFk1GzijOhlBXCcMNHpgF3S","email":"charlie@kattvarlden.com","role":"guest","_id":"vOto2M3nUM6CnQmz"}
 {"username":"c","password":"$2a$10$suaDdzDr50G02.QLFpicr.S6RZWL1YlSmFJY2n2.L568ifZklEycu","email":"c","role":"guest","_id":"yc5oAWSLMPidYF46"}
 {"username":"kguv","password":"$2a$10$LsSR7eXVvj9sWAveKEVOvubtD/zqpf2As2ygCoYF07lp/ntQbKREy","email":"ib","role":"guest","_id":"yvsn19N9cEUwlWLe"}
-{"username":"les","password":"$2a$10$VuVPdL0kYZtwUVDIF5uhMeMTr6lOz/BkLx7qgkvHuI05pG3b6dfBG","email":"les","role":"guest","_id":"WNetZLvYXAKMubSM"}
-{"username":"x","password":"$2a$10$iDKc9jUMMQ0HsdBr66j8Hucof7AmdGBrey5ALsmzsLysCl5OZrgrq","email":"x","role":"guest","_id":"b1SXmsXDi2PZbmfc"}
