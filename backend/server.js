@@ -89,10 +89,11 @@ app.post("/api/login", async (request, response) => {
     username: credentials.username,
   });
 
-  const findRole = await accountsDB.find({ role: credentials.role });
-  const role = findRole[0].role;
+  // const findRole = await accountsDB.find({ role: credentials.role });
 
   if (findAccount.length > 0) {
+    const role = findAccount[0].role;
+
     if (role === credentials.role) {
       const samePassword = await bcryptFunction.comparePassword(
         credentials.password,
@@ -228,12 +229,20 @@ app.delete("/api/deletephoto", async (request, response) => {
   });
   if (findRole.length > 0) {
     if (findRole[0].role === "admin") {
-      const user = await photoAlbumDB.find({ img: credentials.img });
+      const user = await photoAlbumDB.find({
+        img: credentials.img,
+      });
       if (user.length > 0) {
         const userID = user[0]._id;
         photoAlbumDB.update(
-          { _id: userID },
-          { $pull: { img: credentials.img } }
+          {
+            _id: userID,
+          },
+          {
+            $pull: {
+              img: credentials.img,
+            },
+          }
         );
         resObj.success = true;
       }
