@@ -19,8 +19,14 @@ app.use(
 //   extended: true
 
 // }));
-app.use(express.json({ limit: "50mb", extended: true }));
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(express.json({
+  limit: "50mb",
+  extended: true
+}));
+app.use(express.urlencoded({
+  limit: "50mb",
+  extended: true
+}));
 
 const accountsDB = new nedb({
   filename: "accounts.db",
@@ -95,12 +101,10 @@ app.post("/api/login", async (request, response) => {
         resObj.success = true;
       }
     }
-    const token = jwt.sign(
-      {
+    const token = jwt.sign({
         username: findAccount[0].username,
       },
-      "fiskmås",
-      {
+      "fiskmås", {
         expiresIn: 600,
       }
     );
@@ -126,16 +130,13 @@ app.post("/api/addPhoto", async (request, response) => {
   if (findUser.length > 0) {
     const user = findUser[0]._id;
 
-    photoAlbumDB.update(
-      {
-        _id: user,
+    photoAlbumDB.update({
+      _id: user,
+    }, {
+      $push: {
+        img: credentials.img,
       },
-      {
-        $push: {
-          img: credentials.img,
-        },
-      }
-    );
+    });
   } else {
     photoAlbumDB.insert(userObj);
   }
@@ -151,7 +152,9 @@ app.post("/api/getalbum", async (request, response) => {
     allImages: [],
   };
 
-  const findRole = await accountsDB.find({ username: credentials.username });
+  const findRole = await accountsDB.find({
+    username: credentials.username
+  });
   console.log(findRole);
   let getAllImages = [];
 
@@ -194,24 +197,27 @@ app.delete("/api/deletephoto", async (request, response) => {
     user: {},
   };
 
-  const foundUser = await photoAlbumDB.find({ username: credentials.user });
+  const foundUser = await photoAlbumDB.find({
+    username: credentials.user
+  });
 
   if (foundUser.length > 0) {
     const userID = foundUser[0]._id;
-    photoAlbumDB.update(
-      {
-        _id: userID,
+    photoAlbumDB.update({
+      _id: userID,
+    }, {
+      $pull: {
+        img: credentials.img
       },
-      {
-        $pull: { img: credentials.img },
-      }
-    );
+    });
 
     resObj.success = true;
   } else {
     resObj.success = false;
   }
-  const updatedUser = await photoAlbumDB.find({ username: credentials.user });
+  const updatedUser = await photoAlbumDB.find({
+    username: credentials.user
+  });
   resObj.user = updatedUser;
   response.json(resObj);
 });

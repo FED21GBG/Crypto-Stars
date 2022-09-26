@@ -91,9 +91,15 @@ function CameraPage() {
     getUsercamera();
   }, []);
 
+
+  function logout (){
+    navigate("/LoginPage")
+    window.localStorage.clear();
+  }
+
   return (
     <section className="camera-section">
-      <button className="logout-btn" onClick={() => navigate("/LoginPage")}>
+      <button className="logout-btn" onClick={()=> logout()}>
         Logga ut
       </button>
       <img
