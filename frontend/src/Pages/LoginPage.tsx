@@ -30,6 +30,7 @@ function LoginPage() {
     if (data.success) {
       navigate("/CameraPage");
       localStorage.setItem("username", data.user);
+      localStorage.setItem("token", data.token);
     } else {
       alert(
         "This account does not excist or wrong role. Either sign up or check your role ;)"
