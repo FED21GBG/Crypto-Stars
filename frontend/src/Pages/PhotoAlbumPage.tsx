@@ -20,7 +20,7 @@ function PhotoAlbumPage() {
       headers: { "Content-Type": "application/json" },
     });
     const data = await response.json();
-    console.log(data);
+    console.log(data.allImages);
     if (data.success === true) {
       setPictures(data.allImages);
     }

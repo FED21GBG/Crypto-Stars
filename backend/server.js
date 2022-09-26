@@ -235,6 +235,7 @@ app.delete("/api/deletephoto", async (request, response) => {
           { _id: userID },
           { $pull: { img: credentials.img } }
         );
+        resObj.success = true;
       }
     } else {
       const foundUser = await photoAlbumDB.find({
