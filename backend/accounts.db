@@ -21,3 +21,5 @@
 {"username":"charlie","password":"$2a$10$czbFS9er0h1upZcfIUA8Ruk7mQAVRfVFk1GzijOhlBXCcMNHpgF3S","email":"charlie@kattvarlden.com","role":"guest","_id":"vOto2M3nUM6CnQmz"}
 {"username":"c","password":"$2a$10$suaDdzDr50G02.QLFpicr.S6RZWL1YlSmFJY2n2.L568ifZklEycu","email":"c","role":"guest","_id":"yc5oAWSLMPidYF46"}
 {"username":"kguv","password":"$2a$10$LsSR7eXVvj9sWAveKEVOvubtD/zqpf2As2ygCoYF07lp/ntQbKREy","email":"ib","role":"guest","_id":"yvsn19N9cEUwlWLe"}
+{"username":"sammi","password":"$2a$10$wPX11X5iemdXyjneQR5HSuu/T.U86HpHFuuZa9P2PogEyplIsQNYy","email":"sammi","role":"guest","_id":"wMy9yhceTBDBdWSU"}
+{"username":"svante","password":"$2a$10$jW7rDA7Q.ITquk3zQIb3OuphuZvi6CFZm2phZzR2uyln7q3Rb4qaO","email":"svante","role":"guest","_id":"qms7PPj9GCDgB43C"}
