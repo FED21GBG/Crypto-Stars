@@ -10,7 +10,7 @@ app.use(
     origin: "*",
   })
 );
-
+// hejhejhejhej
 // app.use(express.json());
 
 // app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
