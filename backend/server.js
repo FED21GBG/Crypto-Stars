@@ -90,9 +90,10 @@ app.post("/api/login", async (request, response) => {
   });
 
   // const findRole = await accountsDB.find({ role: credentials.role });
-  const role = findAccount[0].role;
 
   if (findAccount.length > 0) {
+    const role = findAccount[0].role;
+
     if (role === credentials.role) {
       const samePassword = await bcryptFunction.comparePassword(
         credentials.password,
@@ -103,12 +104,10 @@ app.post("/api/login", async (request, response) => {
         resObj.role = true;
         resObj.success = true;
 
-        const token = jwt.sign(
-          {
+        const token = jwt.sign({
             username: findAccount[0].username,
           },
-          "fiskmås",
-          {
+          "fiskmås", {
             expiresIn: 600,
           }
         );
@@ -155,16 +154,13 @@ app.post("/api/addPhoto", async (request, response) => {
   if (findUser.length > 0) {
     const user = findUser[0]._id;
 
-    photoAlbumDB.update(
-      {
-        _id: user,
+    photoAlbumDB.update({
+      _id: user,
+    }, {
+      $push: {
+        img: credentials.img,
       },
-      {
-        $push: {
-          img: credentials.img,
-        },
-      }
-    );
+    });
   } else {
     photoAlbumDB.insert(userObj);
   }
@@ -228,13 +224,18 @@ app.delete("/api/deletephoto", async (request, response) => {
   });
   if (findRole.length > 0) {
     if (findRole[0].role === "admin") {
-      const user = await photoAlbumDB.find({ img: credentials.img });
+      const user = await photoAlbumDB.find({
+        img: credentials.img
+      });
       if (user.length > 0) {
         const userID = user[0]._id;
-        photoAlbumDB.update(
-          { _id: userID },
-          { $pull: { img: credentials.img } }
-        );
+        photoAlbumDB.update({
+          _id: userID
+        }, {
+          $pull: {
+            img: credentials.img
+          }
+        });
         resObj.success = true;
       }
     } else {
@@ -244,16 +245,13 @@ app.delete("/api/deletephoto", async (request, response) => {
 
       if (foundUser.length > 0) {
         const userID = foundUser[0]._id;
-        photoAlbumDB.update(
-          {
-            _id: userID,
+        photoAlbumDB.update({
+          _id: userID,
+        }, {
+          $pull: {
+            img: credentials.img,
           },
-          {
-            $pull: {
-              img: credentials.img,
-            },
-          }
-        );
+        });
 
         resObj.success = true;
       } else {
