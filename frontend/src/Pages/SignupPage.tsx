@@ -9,50 +9,58 @@ function SignupPage() {
   const navigate = useNavigate();
 
   async function signUp() {
-    const user = {
-      username: username,
-      password: password,
-      email: email,
-      role: "guest",
-    };
-    const response = await fetch("http://localhost:2009/api/signup", {
-      method: "POST",
-      body: JSON.stringify(user),
-      headers: { "Content-Type": "application/json" },
-    });
+    if (username.length > 0 && password.length > 0 && email.length > 0) {
+      const user = {
+        username: username,
+        password: password,
+        email: email,
+        role: "guest",
+      };
+      const response = await fetch("http://localhost:2009/api/signup", {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: { "Content-Type": "application/json" },
+      });
 
-    const data = await response.json();
-    console.log(data);
-    if (data.success) {
-      localStorage.setItem("username", user.username);
-      navigate("/CameraPage");
+      const data = await response.json();
+      console.log(data);
+      if (data.success) {
+        localStorage.setItem("username", user.username);
+        navigate("/CameraPage");
+      } else {
+        alert("user already excists, pick another name or password :)");
+      }
     } else {
-      alert("user already excists, pick another name or password :)");
+      alert("Skriv nått förfan");
     }
   }
 
   return (
-    <section>
-      SignupPage
-      <input
-        type="text"
-        id="username"
-        placeholder="username"
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        id="password"
-        placeholder="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input
-        type="email"
-        id="email"
-        placeholder="email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <button onClick={() => signUp()}>Signup</button>
+    <section className="container">
+      <section className="login-section">
+        <input
+          className=""
+          type="text"
+          id="username"
+          placeholder="Användarnamn"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          id="password"
+          placeholder="Lösenord"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <button className="btn" onClick={() => signUp()}>
+          Skapa konto
+        </button>
+      </section>
     </section>
   );
 }

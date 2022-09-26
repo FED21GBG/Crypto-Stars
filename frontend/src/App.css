@@ -182,3 +182,15 @@ input {
   position: absolute;
   right: 0;
 }
+
+/* SIGNUP PAGE */
+@media (max-width: 480px) {
+  input {
+    width: 60%;
+  }
+  .login-section {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+}

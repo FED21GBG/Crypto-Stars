@@ -28,9 +28,9 @@ function LoginPage() {
     const data = await response.json();
     console.log(data);
     if (data.success) {
-      navigate("/CameraPage");
       localStorage.setItem("username", data.user);
-      localStorage.setItem("token", data.token);
+      sessionStorage.setItem("token", data.token);
+      navigate("/CameraPage");
     } else {
       alert(
         "This account does not excist or wrong role. Either sign up or check your role ;)"

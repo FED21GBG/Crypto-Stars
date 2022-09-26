@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import albumLogo from "../gallery.svg";
 
@@ -10,12 +10,15 @@ function CameraPage() {
   const [username, setUsername] = useState("");
   const [photo64, setphoto64] = useState("");
 
-  // const checkCanvas = useCallback(()=>{
-  //   if(canvasRef != null){
-  //     takePhoto()
-  //   }
-
-  // },[canvasRef])
+  async function loggedIn() {
+    const token = sessionStorage.getItem("token");
+    const response = await fetch("http://localhost:2009/api/loggedin", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    console.log(data);
+  }
+  loggedIn();
 
   async function takePhoto() {
     const width = 450;
@@ -91,15 +94,14 @@ function CameraPage() {
     getUsercamera();
   }, []);
 
-
-  function logout (){
-    navigate("/LoginPage")
+  function logout() {
+    navigate("/LoginPage");
     window.localStorage.clear();
   }
 
   return (
     <section className="camera-section">
-      <button className="logout-btn" onClick={()=> logout()}>
+      <button className="logout-btn" onClick={() => logout()}>
         Logga ut
       </button>
       <img
