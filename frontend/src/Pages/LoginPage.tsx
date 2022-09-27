@@ -8,17 +8,15 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("guest");
 
-  useEffect(() => {
-    console.log(role);
-  }, [role]);
 
   async function Login() {
+    
     const user = {
       username: username,
       password: password,
       role: role,
     };
-
+//skickar med user obj till servern och kollar om det stämmer in med som finns i DB
     const response = await fetch("http://localhost:2009/api/login", {
       method: "POST",
       body: JSON.stringify(user),
@@ -26,7 +24,8 @@ function LoginPage() {
     });
 
     const data = await response.json();
-    console.log(data);
+    
+    //om man har loggat in
     if (data.success) {
       localStorage.setItem("username", data.user);
       sessionStorage.setItem("token", data.token);

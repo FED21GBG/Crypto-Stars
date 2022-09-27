@@ -1,4 +1,4 @@
-import { get } from "https";
+
 import { useEffect, useState } from "react";
 import cameraLogo from "../logo.svg";
 import close from "../close-outline.svg";
@@ -14,6 +14,7 @@ function PhotoAlbumPage() {
     const reqObj = {
       username: user,
     };
+    //hämtar bilder från albumet
     const response = await fetch("http://localhost:2009/api/getalbum", {
       method: "POST",
       body: JSON.stringify(reqObj),
@@ -21,6 +22,7 @@ function PhotoAlbumPage() {
     });
     const data = await response.json();
     console.log(data.allImages);
+    //lägger in bilderna i state om det är success
     if (data.success === true) {
       setPictures(data.allImages);
     }
@@ -35,12 +37,14 @@ function PhotoAlbumPage() {
       user: user,
       img: pic,
     };
+    //skickar vald bild till serven och sen tar bort 
     const response = await fetch("http://localhost:2009/api/deletephoto", {
       method: "DELETE",
       body: JSON.stringify(reqObj),
       headers: { "Content-Type": "application/json" },
     });
     const data = await response.json();
+    //hämtar den nya updaterat DB 
     if (data.success === true) {
       getAlbum();
     }

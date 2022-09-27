@@ -1,21 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import albumLogo from "../gallery.svg";
+
+
 function TakenPhotoPage() {
   let getPhoto = localStorage.getItem("photo");
 
-  const photoRef = useRef(null);
+  const photoRef = useRef<HTMLImageElement>(null);
 
   const navigate = useNavigate();
-  // const [photo,setPhoto] = useState<string|null>()
+ 
   function takeNewPic() {
     navigate("/CameraPage");
   }
 
   useEffect(() => {
-    // setPhoto(getPhoto)
-    let photo: any = photoRef.current;
+    //hämtar bilden from localStorage och lägger in den i src
+    let photo: HTMLImageElement | null = photoRef.current;
+    if(photo !== null && getPhoto !== null){
     photo.src = getPhoto;
+  }
   }, []);
 
   return (

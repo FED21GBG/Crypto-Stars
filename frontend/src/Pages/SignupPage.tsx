@@ -9,6 +9,7 @@ function SignupPage() {
   const navigate = useNavigate();
 
   async function signUp() {
+    //KOLLAR så att input valuen är inte tomt!
     if (username.length > 0 && password.length > 0 && email.length > 0) {
       const user = {
         username: username,
@@ -16,6 +17,7 @@ function SignupPage() {
         email: email,
         role: "guest",
       };
+      //FETCHAR
       const response = await fetch("http://localhost:2009/api/signup", {
         method: "POST",
         body: JSON.stringify(user),
@@ -24,6 +26,8 @@ function SignupPage() {
 
       const data = await response.json();
       console.log(data);
+
+      //om sign up är godkännt
       if (data.success) {
         localStorage.setItem("username", user.username);
         navigate("/LoginPage");
