@@ -4,21 +4,13 @@ const app = express();
 const nedb = require("nedb-promise");
 const bcryptFunction = require("./bcrypt");
 const jwt = require("jsonwebtoken");
-const bodyParser = require("body-parser");
 app.use(
   cors({
     origin: "*",
   })
 );
-// hejhejhejhej
-// app.use(express.json());
 
-// app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
-// app.use(bodyParser.text({
-//   limit: '200mb',
-//   extended: true
-
-// }));
+//ger oss mer utrymma i databasen bla.
 app.use(
   express.json({
     limit: "50mb",
@@ -31,7 +23,7 @@ app.use(
     extended: true,
   })
 );
-
+//skapar databas filerna
 const accountsDB = new nedb({
   filename: "accounts.db",
   autoload: true,
@@ -40,6 +32,9 @@ const photoAlbumDB = new nedb({
   filename: "photoAlbum.db",
   autoload: true,
 });
+
+
+//alla endpoints
 
 //sign up
 app.post("/api/signup", async (request, response) => {
@@ -57,7 +52,7 @@ app.post("/api/signup", async (request, response) => {
   const findEmail = await accountsDB.find({
     email: credentials.email,
   });
-
+  //om användaren redan finns
   if (findUser.length > 0) {
     resObj.userNameExist = true;
   }
@@ -68,6 +63,7 @@ app.post("/api/signup", async (request, response) => {
   if (resObj.userEmailExist || resObj.userNameExist) {
     resObj.success = false;
   } else {
+    //om användaren inte finns i databasen
     resObj.success = true;
     const hashPass = await bcryptFunction.hashPassword(credentials.password);
     credentials.password = hashPass;
@@ -89,11 +85,10 @@ app.post("/api/login", async (request, response) => {
     username: credentials.username,
   });
 
-  // const findRole = await accountsDB.find({ role: credentials.role });
-
   if (findAccount.length > 0) {
     const role = findAccount[0].role;
 
+    //här kollar vi om rollerna och hashed password stämmer med som finns i databasen 
     if (role === credentials.role) {
       const samePassword = await bcryptFunction.comparePassword(
         credentials.password,
@@ -104,12 +99,11 @@ app.post("/api/login", async (request, response) => {
         resObj.role = true;
         resObj.success = true;
 
-        const token = jwt.sign(
-          {
+        //här sätter vi vår token
+        const token = jwt.sign({
             username: findAccount[0].username,
           },
-          "fiskmås",
-          {
+          "fiskmås", {
             expiresIn: 600,
           }
         );
@@ -130,6 +124,7 @@ app.get("/api/loggedin", async (request, response) => {
   const token = request.headers.authorization.replace("Bearer ", "");
 
   try {
+    //kollar om token stämmer med det vi skickar in
     const data = jwt.verify(token, "fiskmås");
 
     if (data) {
@@ -148,28 +143,31 @@ app.post("/api/addPhoto", async (request, response) => {
     username: credentials.username,
     img: [credentials.img],
   };
+  const resObj={
+    success: false
+  }
 
   const findUser = await photoAlbumDB.find({
     username: credentials.username,
   });
-  //om user har bilder
+  //om user har bilder så updaterar vi DB
   if (findUser.length > 0) {
     const user = findUser[0]._id;
 
-    photoAlbumDB.update(
-      {
-        _id: user,
+    photoAlbumDB.update({
+      _id: user,
+    }, {
+      $push: {
+        img: credentials.img,
       },
-      {
-        $push: {
-          img: credentials.img,
-        },
-      }
-    );
+    });
+    resObj.success = true
   } else {
+    //annars om anvädaren inte har bilder så lägger vi till den i DB
     photoAlbumDB.insert(userObj);
+    resObj.success = true
   }
-  response.json(userObj);
+  response.json(resObj);
 });
 
 // get album guest
@@ -186,32 +184,38 @@ app.post("/api/getalbum", async (request, response) => {
   });
   let getAllImages = [];
 
-  // Om role är ADMIN
-  if (findRole[0].role === "admin") {
-    // hämta bilder från alla users
-    const allUsers = await photoAlbumDB.find({});
-    allUsers.forEach((user) => {
-      const imgs = user.img;
-      imgs.forEach((img) => {
-        getAllImages.push(img);
+
+  if (findRole.length > 0) {
+    // Om role är ADMIN
+    if (findRole[0].role === "admin") {
+      // hämta bilder från alla users
+      const allUsers = await photoAlbumDB.find({});
+      allUsers.forEach((user) => {
+        const imgs = user.img;
+        imgs.forEach((img) => {
+          getAllImages.push(img);
+        });
       });
-    });
-    resObj.success = true;
-    resObj.allImages = getAllImages;
-  }
-  // Om role är GUEST
-  if (findRole[0].role === "guest") {
-    const findUser = await photoAlbumDB.find({
-      username: credentials.username,
-    });
-    if (findUser.length > 0) {
-      const userImages = findUser[0].img;
-      resObj.allImages = userImages;
       resObj.success = true;
-    } else {
-      alert("No pictures in PhotoAlbum, take a picture plsss");
+      resObj.allImages = getAllImages;
     }
+    // Om role är GUEST
+    if (findRole[0].role === "guest") {
+      const findUser = await photoAlbumDB.find({
+        username: credentials.username,
+      });
+      if (findUser.length > 0) {
+        const userImages = findUser[0].img;
+        resObj.allImages = userImages;
+        resObj.success = true;
+      } else {
+        alert("No pictures in PhotoAlbum, take a picture plsss");
+      }
+    }
+
   }
+
+
   response.json(resObj);
 });
 
@@ -221,48 +225,43 @@ app.delete("/api/deletephoto", async (request, response) => {
 
   resObj = {
     success: false,
-    // user: {},
   };
 
   const findRole = await accountsDB.find({
     username: credentials.user,
   });
+
   if (findRole.length > 0) {
+    // om rollen är ADMIN ska den kunna ta bort allas bilder
     if (findRole[0].role === "admin") {
       const user = await photoAlbumDB.find({
         img: credentials.img,
       });
       if (user.length > 0) {
         const userID = user[0]._id;
-        photoAlbumDB.update(
-          {
-            _id: userID,
+        photoAlbumDB.update({
+          _id: userID,
+        }, {
+          $pull: {
+            img: credentials.img,
           },
-          {
-            $pull: {
-              img: credentials.img,
-            },
-          }
-        );
+        });
         resObj.success = true;
       }
     } else {
       const foundUser = await photoAlbumDB.find({
         username: credentials.user,
       });
-
+      //Om GÄST ska den bara kunna ta bort sina egna bilder!
       if (foundUser.length > 0) {
         const userID = foundUser[0]._id;
-        photoAlbumDB.update(
-          {
-            _id: userID,
+        photoAlbumDB.update({
+          _id: userID,
+        }, {
+          $pull: {
+            img: credentials.img,
           },
-          {
-            $pull: {
-              img: credentials.img,
-            },
-          }
-        );
+        });
 
         resObj.success = true;
       } else {
@@ -271,15 +270,9 @@ app.delete("/api/deletephoto", async (request, response) => {
     }
   }
 
-  // const updatedUser = await photoAlbumDB.find({
-  //   username: credentials.user,
-  // });
-  // console.log(updatedUser);
-  // resObj.user = updatedUser;
   response.json(resObj);
 });
 
-//log out
 
 app.listen(2009, () => {
   console.log("Server listening to port 2009");

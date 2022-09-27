@@ -11,7 +11,7 @@ import TakenPhotoPage from './Pages/TakenPhotoPage';
 
 function App() {
   return (
-    
+    //routar till olika sidor
       <Router>
         <Routes>
           <Route path='/' element={<StartPage />} />

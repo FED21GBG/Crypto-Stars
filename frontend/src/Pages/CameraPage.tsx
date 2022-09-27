@@ -5,12 +5,17 @@ import albumLogo from "../gallery.svg";
 function CameraPage() {
   const navigate = useNavigate();
 
+  //useref för komma åt video och canvas element
   const cameraRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+
+
   const [username, setUsername] = useState("");
   const [photo64, setphoto64] = useState("");
 
   async function loggedIn() {
+    // sätter in vår token in till headers när man har loggat in 
     const token = sessionStorage.getItem("token");
     const response = await fetch("http://localhost:2009/api/loggedin", {
       headers: { Authorization: `Bearer ${token}` },
@@ -21,30 +26,27 @@ function CameraPage() {
   loggedIn();
 
   async function takePhoto() {
+    //sätter storlek på framen
     const width = 450;
     const height = 338;
 
+    // sparar vår camera camera/canvasref i en variabel
     let video: HTMLVideoElement | null = cameraRef.current;
     let dataUrl = "";
-
-    // fixa any!!
-    // I mån om tid, kolla in om det går att lösa med useCallback
     let photo: HTMLCanvasElement | null = canvasRef.current;
+
     if (photo !== null) {
       photo.width = width;
       photo.height = height;
 
       let context = photo.getContext("2d");
+      //förvandlar våra bilder till base64
       if (context !== null && video !== null) {
         context.drawImage(video, 0, 0, width, height);
         dataUrl = photo.toDataURL();
       }
     }
 
-    // const getBase64StringFromDataURL = (dataURL:string) =>
-    // dataURL.replace('data:', '').replace(/^.+,/, '');
-    // const base64 = getBase64StringFromDataURL(dataUrl)
-    // let imgUrl = dataUrl.replace(/^data:image\/(png|jpg);base64,/, "")
 
     const userInfo = {
       username: username,
@@ -52,6 +54,7 @@ function CameraPage() {
     };
     userInfo.img = dataUrl;
 
+    // fetchar och lägger till userInfo obj in i DB
     const response = await fetch("http://localhost:2009/api/addPhoto", {
       method: "POST",
       body: JSON.stringify(userInfo),
@@ -60,21 +63,23 @@ function CameraPage() {
 
     const data = await response.json();
 
-    console.log(data);
-    console.log(dataUrl);
+    // om det lyckas att lägga till photo i servern
+   if(data.success ===true){
     setphoto64(dataUrl);
     localStorage.setItem("photo", dataUrl);
 
     navigate("/TakenPhotoPage");
+   }
+    
   }
 
   function getUsercamera() {
+    //hämtar kameran
     navigator.mediaDevices
       .getUserMedia({
         video: true,
       })
       .then((stream) => {
-        // I mån om tid, kolla in om det går att lösa med useCallback
         let video = cameraRef.current;
         if (video !== null) {
           video.srcObject = stream;
@@ -93,7 +98,8 @@ function CameraPage() {
     }
     getUsercamera();
   }, []);
-
+  
+//när man loggar ut så rensas vår local/session storage 
   function logout() {
     navigate("/LoginPage");
     window.localStorage.clear();
